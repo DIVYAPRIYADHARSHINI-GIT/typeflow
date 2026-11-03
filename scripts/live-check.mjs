@@ -6,7 +6,7 @@
 import { existsSync } from 'node:fs';
 import puppeteer from 'puppeteer-core';
 
-const BASE = (process.argv[2] ?? 'https://typeflow.vercel.app').replace(/\/$/, '');
+const BASE = (process.argv[2] ?? 'https://typeflow-one-mu.vercel.app').replace(/\/$/, '');
 const CHROME = [
   process.env.CHROME_PATH,
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',

@@ -10,7 +10,7 @@ which one is actually holding you back.
 No account. No subscription. No advertising. No server. Your progress is stored in your own
 browser and never leaves your device.
 
-- **Live site:** https://typeflow.vercel.app
+- **Live site:** https://typeflow-one-mu.vercel.app
 - **Repository:** https://github.com/DIVYAPRIYADHARSHINI-GIT/typeflow
 
 ---
