@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TypeFlow - Type faster. Type right.</title>
+    <meta
+      name="description"
+      content="TypeFlow is a free English typing speed test and practice platform. Timed tests, word-count tests, quotes, paragraphs, coding practice and progressive lessons. No account, no tracking - your progress stays in your browser."
+    />
+    <meta name="theme-color" content="#0f172a" />
+    <meta property="og:title" content="TypeFlow - Type faster. Type right." />
+    <meta
+      property="og:description"
+      content="Free typing speed test and practice platform. Timed tests, lessons, coding practice and local-only progress tracking."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      // Apply the stored theme before first paint so there is no flash of the wrong theme.
+      try {
+        var raw = localStorage.getItem('typeflow.settings.v1');
+        var theme = raw ? JSON.parse(raw).theme : null;
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      } catch (e) {
+        document.documentElement.dataset.theme = 'light';
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

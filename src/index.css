@@ -1,0 +1,367 @@
+@import 'tailwindcss';
+
+/* TypeFlow design system.
+   One accent (indigo), a neutral slate ramp, and separately-tuned dark values so both
+   themes clear WCAG AA for body text. Tokens are plain CSS variables so the typing
+   surface can use them without Tailwind class churn. */
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+}
+
+:root {
+  --tf-bg: #f6f7fb;
+  --tf-surface: #ffffff;
+  --tf-surface-2: #f1f3f9;
+  --tf-border: #dfe3ed;
+  --tf-ink: #121826;
+  --tf-ink-soft: #4a5468;
+  /* #6b7589 only reached 4.33:1 against the bg/surface-2 ramp; design QA requires AA. */
+  --tf-ink-faint: #5d6678;
+  --tf-accent: #4338ca;
+  --tf-accent-soft: #eef2ff;
+  --tf-accent-ink: #ffffff;
+  --tf-correct: #15803d;
+  --tf-correct-bg: #dcfce7;
+  --tf-wrong: #b91c1c;
+  --tf-wrong-bg: #fee2e2;
+  /* Un-typed passage text must still clear AA on the surface-2 ramp (homepage preview),
+     so it is dimmer than ink but never a washed-out grey. */
+  --tf-pending: #646d7d;
+  --tf-warn: #92400e;
+  --tf-warn-bg: #fef3c7;
+  --tf-shadow: 0 1px 2px rgba(18, 24, 38, 0.06), 0 8px 24px rgba(18, 24, 38, 0.06);
+}
+
+html[data-theme='dark'] {
+  --tf-bg: #0d1117;
+  --tf-surface: #161b25;
+  --tf-surface-2: #1e2533;
+  --tf-border: #2c3545;
+  --tf-ink: #e9edf5;
+  --tf-ink-soft: #b2bccd;
+  --tf-ink-faint: #9aa7bb;
+  --tf-accent: #8b9cff;
+  --tf-accent-soft: #232b45;
+  --tf-accent-ink: #0d1117;
+  --tf-correct: #5fd68a;
+  --tf-correct-bg: #11301f;
+  --tf-wrong: #ff8a8a;
+  --tf-wrong-bg: #3a1618;
+  --tf-pending: #8793a8;
+  --tf-warn: #fcd34d;
+  --tf-warn-bg: #3a2d08;
+  --tf-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--tf-bg);
+  color: var(--tf-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* --- Reusable primitives ------------------------------------------------- */
+
+.tf-card {
+  background: var(--tf-surface);
+  border: 1px solid var(--tf-border);
+  border-radius: 14px;
+  box-shadow: var(--tf-shadow);
+}
+
+.tf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0 1.1rem;
+  border-radius: 10px;
+  border: 1px solid var(--tf-border);
+  background: var(--tf-surface);
+  color: var(--tf-ink);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.08s ease;
+}
+
+.tf-btn:hover {
+  background: var(--tf-surface-2);
+}
+
+.tf-btn:active {
+  transform: translateY(1px);
+}
+
+.tf-btn-primary {
+  background: var(--tf-accent);
+  border-color: var(--tf-accent);
+  color: var(--tf-accent-ink);
+}
+
+.tf-btn-primary:hover {
+  filter: brightness(1.07);
+  background: var(--tf-accent);
+}
+
+.tf-btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--tf-ink-soft);
+}
+
+.tf-btn-ghost:hover {
+  background: var(--tf-surface-2);
+  color: var(--tf-ink);
+}
+
+.tf-btn-danger {
+  border-color: var(--tf-wrong);
+  color: var(--tf-wrong);
+  background: transparent;
+}
+
+.tf-btn-danger:hover {
+  background: var(--tf-wrong-bg);
+}
+
+.tf-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--tf-border);
+  background: var(--tf-surface);
+  color: var(--tf-ink-soft);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tf-chip:hover {
+  border-color: var(--tf-accent);
+  color: var(--tf-ink);
+}
+
+.tf-chip[aria-pressed='true'],
+.tf-chip[data-active='true'] {
+  background: var(--tf-accent);
+  border-color: var(--tf-accent);
+  color: var(--tf-accent-ink);
+}
+
+.tf-input,
+.tf-select {
+  min-height: 44px;
+  width: 100%;
+  padding: 0 0.75rem;
+  border-radius: 10px;
+  border: 1px solid var(--tf-border);
+  background: var(--tf-surface);
+  color: var(--tf-ink);
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--tf-accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* --- Typing surface ------------------------------------------------------ */
+
+.tf-passage {
+  font-family: var(--font-mono);
+  line-height: 2.1;
+  letter-spacing: 0.01em;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--tf-pending);
+  caret-color: transparent;
+  user-select: none;
+}
+
+.tf-passage[data-size='small'] {
+  font-size: 1.05rem;
+}
+.tf-passage[data-size='medium'] {
+  font-size: 1.3rem;
+}
+.tf-passage[data-size='large'] {
+  font-size: 1.6rem;
+}
+
+.tf-ch {
+  position: relative;
+  border-radius: 2px;
+}
+
+.tf-ch[data-state='correct'],
+.tf-ch[data-state='corrected'] {
+  color: var(--tf-correct);
+}
+
+.tf-ch[data-state='corrected'] {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--tf-correct);
+  text-underline-offset: 4px;
+}
+
+.tf-ch[data-state='incorrect'] {
+  color: var(--tf-wrong);
+  background: var(--tf-wrong-bg);
+}
+
+/* A wrong space must still be visible, so it gets a solid block. */
+.tf-ch[data-state='incorrect'][data-space='true'] {
+  background: var(--tf-wrong);
+  opacity: 0.55;
+}
+
+.tf-ch[data-current='true']::before {
+  content: '';
+  position: absolute;
+  background: var(--tf-accent);
+  animation: tf-blink 1.05s steps(2, start) infinite;
+}
+
+.tf-passage[data-cursor='bar'] .tf-ch[data-current='true']::before {
+  left: -1px;
+  top: 0.1em;
+  width: 2px;
+  height: 1.25em;
+}
+
+.tf-passage[data-cursor='underline'] .tf-ch[data-current='true']::before {
+  left: 0;
+  right: 0;
+  bottom: 0.1em;
+  height: 2px;
+}
+
+.tf-passage[data-cursor='block'] .tf-ch[data-current='true']::before {
+  left: -1px;
+  right: -1px;
+  top: 0.05em;
+  height: 1.35em;
+  opacity: 0.3;
+  border-radius: 3px;
+}
+
+@keyframes tf-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.tf-passage[data-blind='true'] .tf-ch[data-state='correct'],
+.tf-passage[data-blind='true'] .tf-ch[data-state='corrected'],
+.tf-passage[data-blind='true'] .tf-ch[data-state='incorrect'] {
+  color: var(--tf-ink-soft);
+  background: transparent;
+  text-decoration: none;
+}
+
+/* --- On-screen keyboard -------------------------------------------------- */
+
+.tf-key {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  min-width: 0;
+  padding: 0 0.25rem;
+  border-radius: 7px;
+  border: 1px solid var(--tf-border);
+  background: var(--tf-surface-2);
+  color: var(--tf-ink-soft);
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease;
+}
+
+.tf-key[data-next='true'] {
+  background: var(--tf-accent);
+  border-color: var(--tf-accent);
+  color: var(--tf-accent-ink);
+}
+
+.tf-key[data-hit='correct'] {
+  background: var(--tf-correct-bg);
+  border-color: var(--tf-correct);
+  color: var(--tf-correct);
+}
+
+.tf-key[data-hit='incorrect'] {
+  background: var(--tf-wrong-bg);
+  border-color: var(--tf-wrong);
+  color: var(--tf-wrong);
+}
+
+.tf-key[data-homing='true']::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  width: 10px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.65;
+}
+
+/* --- Misc ---------------------------------------------------------------- */
+
+.tf-stat-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.tf-skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: var(--tf-accent);
+  color: var(--tf-accent-ink);
+  border-radius: 0 0 8px 0;
+  font-weight: 600;
+}
+
+.tf-skip-link:focus {
+  left: 0;
+}
